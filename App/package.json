@@ -16,9 +16,25 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@unovis/ts": "^1.4.3-beta.0",
+    "@unovis/vue": "^1.4.3-beta.0",
+    "@vee-validate/zod": "^4.13.2",
+    "@vueuse/core": "^11.1.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "embla-carousel-vue": "^8.3.0",
+    "lucide-vue-next": "^0.445.0",
     "pinia": "^2.1.7",
+    "radix-vue": "^1.9.6",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7",
+    "v-calendar": "^3.1.2",
+    "vaul-vue": "^0.2.0",
+    "vee-validate": "^4.13.2",
     "vue": "^3.4.29",
-    "vue-router": "^4.3.3"
+    "vue-router": "^4.3.3",
+    "vue-sonner": "^1.2.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@headlessui/vue": "^1.7.23",
