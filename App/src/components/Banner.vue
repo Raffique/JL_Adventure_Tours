@@ -2,7 +2,7 @@
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { ref, computed } from 'vue'
 
-const type = 1
+const type = 5
 
 const props = withDefaults(
   defineProps<{
