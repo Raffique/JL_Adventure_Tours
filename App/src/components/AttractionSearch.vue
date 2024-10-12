@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Input } from '@/components/ui/input'
+import Button from '@/components/ui/button/Button.vue'
+import DateSelector from '@/components/DateSelector.vue'
+import TimeSelector from '@/components/TimeSelector.vue'
+</script>
+
+<template>
+  <div class="flex">
+    <Input />
+    <DateRangeSelector />
+    <Button class="bg-blue-700">Search</Button>
+  </div>
+</template>

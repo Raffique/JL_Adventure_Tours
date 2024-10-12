@@ -1,86 +1,176 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/20/solid'
+import { ref, computed } from 'vue'
+
+const type = 1
+
+const props = withDefaults(
+  defineProps<{
+    option: number
+  }>(),
+  {
+    option: 1
+  }
+)
+
+const bgClass = computed(() => {
+  if (props.option == 1) {
+    return "bg-gradient-to-r from-blue-700 to-blue-400"
+  } else if (props.option == 2) {
+    return "bg-gradient-to-r from-red-700 to-red-400"
+  } else if (props.option == 3) {
+    return "bg-gradient-to-r from-green-700 to-green-400"
+  } else if (props.option == 4) {
+    return "bg-gradient-to-r from-yellow-700 to-yellow-400"
+  }
+  return ""
+})
+
+
 </script>
 
 <template>
-  <div
-    class="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1"
-  >
-    <div
-      class="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
-      aria-hidden="true"
+  <div>
+    <div v-if="type==1"
+      class="relative font-sans before:absolute before:w-full before:h-full before:inset-0 before:bg-black before:opacity-50 before:z-10"
     >
-      <div
-        class="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30"
-        style="
-          clip-path: polygon(
-            74.8% 41.9%,
-            97.2% 73.2%,
-            100% 34.9%,
-            92.5% 0.4%,
-            87.5% 0%,
-            75% 28.6%,
-            58.5% 54.6%,
-            50.1% 56.8%,
-            46.9% 44%,
-            48.3% 17.4%,
-            24.7% 53.9%,
-            0% 27.9%,
-            11.9% 74.2%,
-            24.9% 54.1%,
-            68.6% 100%,
-            74.8% 41.9%
-          );
-        "
+      <img
+        src="https://readymadeui.com/cardImg.webp"
+        alt="Banner Image"
+        class="absolute inset-0 w-full h-full object-cover"
       />
-    </div>
-    <div
-      class="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
-      aria-hidden="true"
-    >
+
       <div
-        class="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30"
-        style="
-          clip-path: polygon(
-            74.8% 41.9%,
-            97.2% 73.2%,
-            100% 34.9%,
-            92.5% 0.4%,
-            87.5% 0%,
-            75% 28.6%,
-            58.5% 54.6%,
-            50.1% 56.8%,
-            46.9% 44%,
-            48.3% 17.4%,
-            24.7% 53.9%,
-            0% 27.9%,
-            11.9% 74.2%,
-            24.9% 54.1%,
-            68.6% 100%,
-            74.8% 41.9%
-          );
-        "
-      />
-    </div>
-    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-      <p class="text-sm leading-6 text-gray-900">
-        <strong class="font-semibold">GeneriCon 2023</strong
-        ><svg viewBox="0 0 2 2" class="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
-          <circle cx="1" cy="1" r="1" /></svg
-        >Join us in Denver from June 7 – 9 to see what’s coming next.
-      </p>
-      <a
-        href="#"
-        class="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
-        >Register now <span aria-hidden="true">&rarr;</span></a
+        class="min-h-[350px] relative z-50 h-full max-w-6xl mx-auto flex flex-col justify-center items-center text-center text-white p-6"
       >
+        <h2 class="sm:text-4xl text-2xl font-bold mb-6">Explore the World</h2>
+        <p class="sm:text-lg text-base text-center text-gray-200">
+          Embark on unforgettable journeys. Book your dream vacation today!
+        </p>
+
+        <slot />
+
+        <!-- <button
+          type="button"
+          class="mt-12 bg-transparent text-white text-base py-3 px-6 border border-white rounded-lg hover:bg-white hover:text-black transition duration-300"
+        >
+          Book Now
+        </button> -->
+      </div>
     </div>
-    <div class="flex flex-1 justify-end">
-      <button type="button" class="-m-3 p-3 focus-visible:outline-offset-[-4px]">
-        <span class="sr-only">Dismiss</span>
-        <XMarkIcon class="h-5 w-5 text-gray-900" aria-hidden="true" />
-      </button>
+
+    <div v-else-if="type==2" class="bg-gradient-to-r from-blue-700 to-[#B06AB3] font-sans px-6 py-12">
+      <div class="container mx-auto flex flex-col justify-center items-center text-center">
+        <h2 class="text-white sm:text-4xl text-3xl font-bold mb-4">Discover Our New Collection</h2>
+        <p class="text-white text-base text-center mb-8">Elevate your style with our latest arrivals. Shop now and enjoy exclusive discounts!</p>
+        <slot/>
+        <!-- <button type="button" class="bg-white text-sm text-blue-600 font-semibold py-3 px-6 rounded-lg hover:bg-slate-100">
+          Get Started
+        </button> -->
+      </div>
     </div>
-    <br>
+
+    <!-- promotion banner -->
+    <div v-else-if="type==3" class="bg-gray-800 text-white py-16 px-8 font-sans">
+      <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-x-6 gap-y-8">
+        <div class="md:w-1/2 text-center md:text-left">
+          <h2 class="text-3xl font-semibold mb-4">Unlock Your Potential</h2>
+          <p class="text-base text-gray-300">Upgrade your skills with our premium courses. Enroll now and access exclusive content!</p>
+        </div>
+
+        <div class="md:w-1/2 flex justify-center">
+          <!-- <button type="button" class="bg-yellow-400 text-gray-800 py-3 px-6 font-semibold rounded">
+            Enroll Now
+          </button> -->
+          <slot/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner with feature image -->
+    <div v-else-if="type==4" class="grid md:grid-cols-3 gap-6 min-h-[164px] py-8 p-16 font-sans overflow-hidden"
+      :class="bgClass"
+    >
+      <div class="md:col-span-2">
+        <h1 class="text-3xl font-bold text-white">Welcome to ReadymadeUI!</h1>
+        <p class="text-base text-gray-200 mt-4">Best tailwind css readymade UI plateform</p>
+
+        <!-- <button type="button"
+          class="py-3 px-6 text-sm font-semibold bg-white text-blue-600 hover:bg-slate-100 rounded-md mt-8">Get
+          Started</button> -->
+        <slot/>
+      </div>
+
+      <div class="relative max-md:hidden">
+        <img src="https://readymadeui.com/readymadeui_banner2.webp" alt="Banner Image"
+          class="w-full right-4 top-[-13px] md:absolute skew-x-[-16deg] rotate-2 object-cover" />
+      </div>
+    </div>
+
+    <!-- banner with hero section -->
+    <div v-else-if="type==5" class="font-sans">
+      <div class="grid lg:grid-cols-2 items-center lg:gap-y-6 bg-blue-500">
+        <div class="max-lg:order-1 max-lg:text-center sm:p-12 p-4">
+          <h2 class="text-gray-800 lg:text-5xl text-3xl font-bold lg:!leading-[56px]">Elevate Your Experience with Modern Elegance</h2>
+          <p class="text-gray-800 mt-6 text-base leading-relaxed">Laboris qui Lorem ad tempor ut reprehenderit. Nostrud anim nulla officia ea sit deserunt. Eu eu quis anim aute Laboris qui Lorem ad tempor ut reprehenderit.</p>
+          <!-- <button type='button'
+            class="bg-transparent border-2 border-gray-800 mt-12 transition-all text-gray-800 font-bold text-sm rounded-md px-6 py-2.5">Get Started</button>
+          -->
+          <slot/>
+        </div>
+
+        <div class="lg:h-[480px] flex items-center">
+          <img src="https://readymadeui.com/team-image.webp" class="w-full h-full object-cover" alt="Dining Experience" />
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6 px-4 my-12">
+        <div class="bg-gray-100 p-6 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#007bff" class="w-10 h-10 mb-4 inline-block bg-white p-2 rounded-md" viewBox="0 0 32 32">
+            <path d="M28.068 12h-.128a.934.934 0 0 1-.864-.6.924.924 0 0 1 .2-1.01l.091-.091a2.938 2.938 0 0 0 0-4.147l-1.511-1.51a2.935 2.935 0 0 0-4.146 0l-.091.091A.956.956 0 0 1 20 4.061v-.129A2.935 2.935 0 0 0 17.068 1h-2.136A2.935 2.935 0 0 0 12 3.932v.129a.956.956 0 0 1-1.614.668l-.086-.091a2.935 2.935 0 0 0-4.146 0l-1.516 1.51a2.938 2.938 0 0 0 0 4.147l.091.091a.935.935 0 0 1 .185 1.035.924.924 0 0 1-.854.579h-.128A2.935 2.935 0 0 0 1 14.932v2.136A2.935 2.935 0 0 0 3.932 20h.128a.934.934 0 0 1 .864.6.924.924 0 0 1-.2 1.01l-.091.091a2.938 2.938 0 0 0 0 4.147l1.51 1.509a2.934 2.934 0 0 0 4.147 0l.091-.091a.936.936 0 0 1 1.035-.185.922.922 0 0 1 .579.853v.129A2.935 2.935 0 0 0 14.932 31h2.136A2.935 2.935 0 0 0 20 28.068v-.129a.956.956 0 0 1 1.614-.668l.091.091a2.935 2.935 0 0 0 4.146 0l1.511-1.509a2.938 2.938 0 0 0 0-4.147l-.091-.091a.935.935 0 0 1-.185-1.035.924.924 0 0 1 .854-.58h.128A2.935 2.935 0 0 0 31 17.068v-2.136A2.935 2.935 0 0 0 28.068 12ZM29 17.068a.933.933 0 0 1-.932.932h-.128a2.956 2.956 0 0 0-2.083 5.028l.09.091a.934.934 0 0 1 0 1.319l-1.511 1.509a.932.932 0 0 1-1.318 0l-.09-.091A2.957 2.957 0 0 0 18 27.939v.129a.933.933 0 0 1-.932.932h-2.136a.933.933 0 0 1-.932-.932v-.129a2.951 2.951 0 0 0-5.028-2.082l-.091.091a.934.934 0 0 1-1.318 0l-1.51-1.509a.934.934 0 0 1 0-1.319l.091-.091A2.956 2.956 0 0 0 4.06 18h-.128A.933.933 0 0 1 3 17.068v-2.136A.933.933 0 0 1 3.932 14h.128a2.956 2.956 0 0 0 2.083-5.028l-.09-.091a.933.933 0 0 1 0-1.318l1.51-1.511a.932.932 0 0 1 1.318 0l.09.091A2.957 2.957 0 0 0 14 4.061v-.129A.933.933 0 0 1 14.932 3h2.136a.933.933 0 0 1 .932.932v.129a2.956 2.956 0 0 0 5.028 2.082l.091-.091a.932.932 0 0 1 1.318 0l1.51 1.511a.933.933 0 0 1 0 1.318l-.091.091A2.956 2.956 0 0 0 27.94 14h.128a.933.933 0 0 1 .932.932Z" data-original="#000000" />
+            <path d="M16 9a7 7 0 1 0 7 7 7.008 7.008 0 0 0-7-7Zm0 12a5 5 0 1 1 5-5 5.006 5.006 0 0 1-5 5Z" data-original="#000000" />
+          </svg>
+          <h3 class="text-lg font-bold mb-2 text-gray-800">Customization</h3>
+          <p class="text-sm text-gray-600">Tailor our product to suit your needs.</p>
+          <a href="javascript:void(0);" class="text-blue-600 font-bold inline-block text-sm mt-4 hover:underline">Learn more</a>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#007bff" class="w-10 h-10 mb-4 inline-block bg-white p-2 rounded-md" viewBox="0 0 512.001 512.001">
+            <path d="M271.029 0c-33.091 0-61 27.909-61 61s27.909 61 61 61 60-27.909 60-61-26.909-61-60-61zm66.592 122c-16.485 18.279-40.096 30-66.592 30-26.496 0-51.107-11.721-67.592-30-14.392 15.959-23.408 36.866-23.408 60v15c0 8.291 6.709 15 15 15h151c8.291 0 15-6.709 15-15v-15c0-23.134-9.016-44.041-23.408-60zM144.946 460.404 68.505 307.149c-7.381-14.799-25.345-20.834-40.162-13.493l-19.979 9.897c-7.439 3.689-10.466 12.73-6.753 20.156l90 180c3.701 7.423 12.704 10.377 20.083 6.738l19.722-9.771c14.875-7.368 20.938-25.417 13.53-40.272zM499.73 247.7c-12.301-9-29.401-7.2-39.6 3.9l-82 100.8c-5.7 6-16.5 9.6-22.2 9.6h-69.901c-8.401 0-15-6.599-15-15s6.599-15 15-15h60c16.5 0 30-13.5 30-30s-13.5-30-30-30h-78.6c-7.476 0-11.204-4.741-17.1-9.901-23.209-20.885-57.949-30.947-93.119-22.795-19.528 4.526-32.697 12.415-46.053 22.993l-.445-.361-21.696 19.094L174.28 452h171.749c28.2 0 55.201-13.5 72.001-36l87.999-126c9.9-13.201 7.2-32.399-6.299-42.3z" data-original="#000000" />
+          </svg>
+          <h3 class="text-lg font-bold mb-2 text-gray-800">Support</h3>
+          <p class="text-sm text-gray-600">24/7 customer support for all your inquiries.</p>
+          <a href="javascript:void(0);" class="text-blue-600 font-bold inline-block text-sm mt-4 hover:underline">Learn more</a>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#007bff" class="w-10 h-10 mb-4 inline-block bg-white p-2 rounded-md" viewBox="0 0 24 24">
+            <g fill-rule="evenodd" clip-rule="evenodd">
+              <path d="M17.03 8.97a.75.75 0 0 1 0 1.06l-4.2 4.2a.75.75 0 0 1-1.154-.114l-1.093-1.639L8.03 15.03a.75.75 0 0 1-1.06-1.06l3.2-3.2a.75.75 0 0 1 1.154.114l1.093 1.639L15.97 8.97a.75.75 0 0 1 1.06 0z" data-original="#000000" />
+              <path d="M13.75 9.5a.75.75 0 0 1 .75-.75h2a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-1.25H14.5a.75.75 0 0 1-.75-.75z" data-original="#000000" />
+              <path d="M3.095 3.095C4.429 1.76 6.426 1.25 9 1.25h6c2.574 0 4.57.51 5.905 1.845C22.24 4.429 22.75 6.426 22.75 9v6c0 2.574-.51 4.57-1.845 5.905C19.571 22.24 17.574 22.75 15 22.75H9c-2.574 0-4.57-.51-5.905-1.845C1.76 19.571 1.25 17.574 1.25 15V9c0-2.574.51-4.57 1.845-5.905zm1.06 1.06C3.24 5.071 2.75 6.574 2.75 9v6c0 2.426.49 3.93 1.405 4.845.916.915 2.419 1.405 4.845 1.405h6c2.426 0 3.93-.49 4.845-1.405.915-.916 1.405-2.419 1.405-4.845V9c0-2.426-.49-3.93-1.405-4.845C18.929 3.24 17.426 2.75 15 2.75H9c-2.426 0-3.93.49-4.845 1.405z" data-original="#000000" />
+            </g>
+          </svg>
+          <h3 class="text-lg font-bold mb-2 text-gray-800">Performance</h3>
+          <p class="text-sm text-gray-600">Experience blazing-fast performance with our product.</p>
+          <a href="javascript:void(0);" class="text-blue-600 font-bold inline-block text-sm mt-4 hover:underline">Learn more</a>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#007bff" class="w-10 h-10 mb-4 inline-block bg-white p-2 rounded-md" viewBox="0 0 682.667 682.667">
+            <defs>
+              <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                <path d="M0 512h512V0H0Z" data-original="#000000" />
+              </clipPath>
+            </defs>
+            <g fill="none" stroke="#007bff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="40" clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
+              <path d="M256 492 60 410.623v-98.925C60 183.674 137.469 68.38 256 20c118.53 48.38 196 163.674 196 291.698v98.925z" data-original="#000000" />
+              <path d="M178 271.894 233.894 216 334 316.105" data-original="#000000" />
+            </g>
+          </svg>
+          <h3 class="text-lg font-bold mb-2 text-gray-800">Security</h3>
+          <p class="text-sm text-gray-600">Your data is protected by the latest security measures.</p>
+          <a href="javascript:void(0);" class="text-blue-600 font-bold inline-block text-sm mt-4 hover:underline">Learn more</a>
+        </div>        
+      </div>
+    </div>
   </div>
 </template>
