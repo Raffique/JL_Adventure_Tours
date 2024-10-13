@@ -2,7 +2,7 @@
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { ref, computed } from 'vue'
 
-const type = 5
+const type = 1
 
 const props = withDefaults(
   defineProps<{
@@ -47,15 +47,7 @@ const bgClass = computed(() => {
         <p class="sm:text-lg text-base text-center text-gray-200">
           Embark on unforgettable journeys. Book your dream vacation today!
         </p>
-
         <slot />
-
-        <!-- <button
-          type="button"
-          class="mt-12 bg-transparent text-white text-base py-3 px-6 border border-white rounded-lg hover:bg-white hover:text-black transition duration-300"
-        >
-          Book Now
-        </button> -->
       </div>
     </div>
 
