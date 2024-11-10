@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/Raffique/JL_Adventure_Tours/Server/models"
 	"github.com/Raffique/JL_Adventure_Tours/Server/repositories"
@@ -14,6 +15,10 @@ var bookingRepo *repositories.BookingRepository
 
 func InitBookingController(db *gorm.DB) {
     bookingRepo = &repositories.BookingRepository{DB: db}
+}
+
+func formatPostgresArray(arr []string) string {
+    return "{" + strings.Join(arr, ",") + "}"
 }
 
 func CreateBooking(c *gin.Context) {

@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "8245d94c-156c-47f3-b346-10b8afc54978",
+		"name": "Booking Application API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "39629114"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"testuser\", \"password\": \"password123\", \"role\": \"customer\"}"
+						},
+						"url": "{{base_url}}/auth/signup"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save token\", function () {\r",
+									"    // Assuming your token is in the response as `token`\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"token\", jsonData.token); // Replace `token` with the key in your response body\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"superadmin\",\r\n    \"password\": \"password1234\"\r\n}"
+						},
+						"url": "{{base_url}}/auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "Get All Bookings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/bookings"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 1,\r\n    \"title\": \"Luxury Room\",\r\n    \"price\": 150.0,\r\n    \"pictures\": [\r\n        \"https://i.pinimg.com/736x/80/df/20/80df20b215213076d4a446f5df618b8a.jpg\"\r\n    ],\r\n    \"periods\": [\r\n        {\r\n            \"start\": \"2023-11-01T00:00:00Z\",\r\n            \"end\": \"2023-11-02T00:00:00Z\"\r\n        }\r\n    ],\r\n    \"status\": \"available\",\r\n    \"details\": \"Spacious room with sea view\"\r\n}"
+						},
+						"url": "{{base_url}}/bookings"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Booking by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/bookings/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bookings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Booking",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 1,\r\n    \"title\": \"Updated Luxury Room\",\r\n    \"price\": 180.0,\r\n    \"pictures\": [\r\n        \"https://i.pinimg.com/736x/80/df/20/80df20b215213076d4a446f5df618b8a.jpg\",\r\n        \"https://www.openhousedesigns.com/wp-content/uploads/2022/04/luxury-house-11-2-1024x576.jpg\"\r\n    ],\r\n    \"status\": \"booked\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/bookings/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bookings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Booking",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/bookings/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bookings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Routes",
+			"item": [
+				{
+					"name": "Get All Bookings (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/admin/bookings"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Booking (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"User_id\": 1,\r\n    \"title\": \"Admin Luxury Room\",\r\n    \"price\": 200.0,\r\n    \"pictures\": [\r\n        \"https://i.pinimg.com/736x/80/df/20/80df20b215213076d4a446f5df618b8a.jpg\"\r\n    ],\r\n    \"periods\": [\r\n        {\r\n            \"start\": \"2023-12-01T00:00:00Z\",\r\n            \"end\": \"2023-12-02T00:00:00Z\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}"
+						},
+						"url": "{{base_url}}/admin/bookings"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Super Admin Routes",
+			"item": [
+				{
+					"name": "Create User (Super Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"newadmin\", \"password\": \"password123\", \"role\": \"admin\"}"
+						},
+						"url": "{{base_url}}/super-admin/users"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File Upload",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"type": "file"
+								}
+							]
+						},
+						"url": "{{base_url}}/upload"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
