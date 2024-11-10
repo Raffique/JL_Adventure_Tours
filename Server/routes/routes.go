@@ -1,9 +1,8 @@
 package routes
 
 import (
-	"server/controllers"
-	"server/middlewares"
-
+	"github.com/Raffique/JL_Adventure_Tours/Server/controllers"
+	"github.com/Raffique/JL_Adventure_Tours/Server/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,9 +37,11 @@ func SetupRoutes(router *gin.Engine) {
     superAdmin.Use(middlewares.AuthMiddleware(), middlewares.RoleMiddleware("super_admin"))
     {
         // Only accessible to super admins
-        superAdmin.POST("/users", controllers.CreateUser) // Example for user management
-        superAdmin.DELETE("/users/:id", controllers.DeleteUser)
-        // More super admin-specific routes can go here
+        superAdmin.POST("/users", controllers.CreateUser)      // Create a new user
+        superAdmin.GET("/users", controllers.GetUsers)         // Retrieve all users
+        superAdmin.GET("/users/:id", controllers.GetUser)      // Retrieve a single user
+        superAdmin.PUT("/users/:id", controllers.UpdateUser)   // Update a user's information
+        superAdmin.DELETE("/users/:id", controllers.DeleteUser) // Delete a user
     }
 
     payment := router.Group("/payment")

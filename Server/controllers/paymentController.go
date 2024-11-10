@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"server/services"
 	"strconv"
 
+	"github.com/Raffique/JL_Adventure_Tours/Server/services"
 	"github.com/gin-gonic/gin"
 )
 

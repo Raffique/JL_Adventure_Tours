@@ -1,18 +1,19 @@
 package main
 
 import (
-	"server/config"
-	"server/controllers"
-	"server/migrations"
-	"server/routes"
-	"server/services"
-
+	"github.com/Raffique/JL_Adventure_Tours/Server/config"
+	"github.com/Raffique/JL_Adventure_Tours/Server/controllers"
+	"github.com/Raffique/JL_Adventure_Tours/Server/migrations"
+	"github.com/Raffique/JL_Adventure_Tours/Server/routes"
+	"github.com/Raffique/JL_Adventure_Tours/Server/services"
+	"github.com/Raffique/JL_Adventure_Tours/Server/storage"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
     config.LoadEnv()
     config.ConnectDatabase()
+	storage.InitStorage()
     services.InitStripe()
 
     db := config.DB

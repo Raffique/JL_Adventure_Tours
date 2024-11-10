@@ -2,8 +2,8 @@ package migrations
 
 import (
 	"log"
-	"server/models"
 
+	"github.com/Raffique/JL_Adventure_Tours/Server/models"
 	"github.com/go-gormigrate/gormigrate/v2"
 	"gorm.io/gorm"
 )
@@ -22,10 +22,10 @@ func Migrate(db *gorm.DB) {
         {
             ID: "20231110_create_bookings",
             Migrate: func(tx *gorm.DB) error {
-                return tx.AutoMigrate(&models.Booking{})
+                return tx.AutoMigrate(&models.Booking{}, &models.BookingPeriod{}, &models.BookingHistory{})
             },
             Rollback: func(tx *gorm.DB) error {
-                return tx.Migrator().DropTable("bookings")
+                return tx.Migrator().DropTable("booking_histories", "booking_periods", "bookings")
             },
         },
     })

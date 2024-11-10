@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"net/http"
-	"server/models"
-	"server/repositories"
 	"strconv"
 
+	"github.com/Raffique/JL_Adventure_Tours/Server/models"
+	"github.com/Raffique/JL_Adventure_Tours/Server/repositories"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -22,10 +22,12 @@ func CreateBooking(c *gin.Context) {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+
     if err := bookingRepo.CreateBooking(&booking); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create booking"})
         return
     }
+
     c.JSON(http.StatusOK, booking)
 }
 

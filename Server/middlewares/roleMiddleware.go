@@ -2,23 +2,31 @@ package middlewares
 
 import (
 	"net/http"
-	"server/utils"
+	"strings"
 
+	"github.com/Raffique/JL_Adventure_Tours/Server/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func RoleMiddleware(requiredRole string) gin.HandlerFunc {
     return func(c *gin.Context) {
         token := c.GetHeader("Authorization")
-        claims, err := utils.VerifyToken(token)
-        if err != nil {
+        if token == "" {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
             c.Abort()
             return
         }
 
-        // Check if the user's role meets or exceeds the required role
-        userRole := claims["role"].(string)
+        token = strings.Split(token, "Bearer ")[1]
+        claims, err := utils.VerifyToken(token)
+        if err != nil {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+            c.Abort()
+            return
+        }
+
+        // Access role directly from the claims struct
+        userRole := claims.Role
 
         if !isRoleAllowed(userRole, requiredRole) {
             c.JSON(http.StatusForbidden, gin.H{"error": "Access denied"})

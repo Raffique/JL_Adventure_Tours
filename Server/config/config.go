@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var IsProd bool
+
 var DB *gorm.DB
 
 func LoadEnv() {
@@ -17,6 +19,8 @@ func LoadEnv() {
     if err != nil {
         log.Fatalf("Error loading .env file")
     }
+
+    IsProd = os.Getenv("ENV") == "prod"
 }
 
 func ConnectDatabase() {
