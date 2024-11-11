@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/Raffique/JL_Adventure_Tours/Server/config"
 	"github.com/Raffique/JL_Adventure_Tours/Server/controllers"
@@ -11,6 +12,7 @@ import (
 	"github.com/Raffique/JL_Adventure_Tours/Server/services"
 	"github.com/Raffique/JL_Adventure_Tours/Server/storage"
 	"github.com/Raffique/JL_Adventure_Tours/Server/utils"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -29,6 +31,15 @@ func main() {
     controllers.InitBookingController(db)
 
     router := gin.Default()
+    // Configure CORS options
+    router.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000"}, // Replace with your frontend's URL
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+        MaxAge:           12 * time.Hour,
+    }))
     routes.SetupRoutes(router)
 
     router.Run(":8080")

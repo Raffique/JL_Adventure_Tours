@@ -60,6 +60,7 @@ Project Directory Structure
 
 Here’s a summary of the project structure:
 
+```bash
 booking_website/
 ├── config/                # Database configuration
 │   └── config.go
@@ -91,6 +92,7 @@ booking_website/
 ├── go.mod                 # Go module dependencies
 ├── go.sum                 # Dependency lock file
 └── main.go                # Entry point of the application
+```
 
 Summary of Key Code Files
 
