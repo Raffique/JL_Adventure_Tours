@@ -1,0 +1,22 @@
+# Config file for Air (https://github.com/cosmtrek/air)
+[build]
+  # The command to build your application
+  cmd = "go build -o ./tmp/main ."
+
+  # The path where the built binary will be output
+  bin = "./tmp/main"
+
+  # Command to run your binary
+  full_bin = "./tmp/main"
+
+  # Watch directories (relative to the `Server` directory)
+  include_dir = ["./"]
+
+  # Excluded directories (to ignore node_modules, etc.)
+  exclude_dir = ["tmp", "vendor"]
+
+  # File extensions to watch
+  extensions = ["go"]
+
+[log]
+  level = "debug"

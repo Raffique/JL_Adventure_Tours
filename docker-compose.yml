@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  
+  backend:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    env_file:
+      - ./Server/.env        # Load backend .env variables
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Server:/app        # Mount local code to container for live updates
+      - /backend/tmp             # Temporary directory for Air to build the binary
+
+  db:
+    image: postgres:13
+    env_file:
+      - ./Server/.env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  frontend:
+    build:
+      context: ./App
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Fixes file watching issues in Docker
+      - /app/node_modules 
+    command: npm run dev          # Run the development server
+    volumes:
+      - ./App:/app
+
+volumes:
+  db-data:

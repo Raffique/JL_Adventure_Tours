@@ -1,23 +1,20 @@
-# Start from the golang base image
-FROM golang:1.22
+# Use a Go version compatible with Air
+FROM golang:1.23 AS base
 
-# Set the current working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum files
-COPY go.mod go.sum ./
+# Install Air from the new module path
+RUN go install github.com/air-verse/air@latest
 
-# Install dependencies
+# Copy go.mod and go.sum for dependency installation
+COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy the rest of the files
+# Copy application source code
 COPY . .
 
-# Build the application
-RUN go build -o main .
-
-# Expose port 8080
+# Expose application port
 EXPOSE 8080
 
-# Command to run the executable
-CMD ["./main"]
+# Use Air for live reloading during development
+CMD ["air", "-c", ".air.toml"]

@@ -1,246 +1,102 @@
-Here’s a step-by-step guide to creating a Go API using the Gin framework, GORM for ORM, and PostgreSQL from a Docker container for CRUD operations. I'll walk through setting up the environment, writing the code, and running everything in Docker.
-Prerequisites
+1. Build the Docker Image
 
-    Install Docker
-    Install Go on your system (if not installed)
-
-1. Set up PostgreSQL in Docker
-
-Start by pulling a PostgreSQL Docker image and running a container.
+The first time you set up the project, or whenever you make changes to the Dockerfile, you’ll need to build the Docker image.
 
 ```bash
-docker pull postgres
-docker run --name go-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=JLAdventuresDB -p 5432:5432 -d postgres
+docker-compose build
 ```
 
-This will create a PostgreSQL instance running on localhost:5432, with the following credentials:
+2. Start the Application
 
-    Database name: exampledb
-    Username: user
-    Password: password
-
-2. Create the Go Project
-
-Start by creating a new directory for your Go project and initialize a Go module.
+Once the image is built, you can start the application and the PostgreSQL container using:
 
 ```bash
-mkdir go-gin-gorm-api
-cd go-gin-gorm-api
-go mod init github.com/yourusername/go-gin-gorm-api
+docker-compose up
 ```
 
-3. Install the Required Go Packages
-
-Install the necessary packages for Gin, GORM, and PostgreSQL.
+This command will start the containers in the foreground and display the logs in your terminal. You can also add -d to run the containers in detached mode (in the background):
 
 ```bash
-go get -u github.com/gin-gonic/gin
-go get -u gorm.io/gorm
-go get -u gorm.io/driver/postgres
+docker-compose up -d
 ```
 
-4. Create a main.go file
-```code
-package main
+3. View Logs
 
-import (
-	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-)
-
-// Define the model
-type Book struct {
-	ID     uint   `json:"id" gorm:"primary_key"`
-	Title  string `json:"title"`
-	Author string `json:"author"`
-}
-
-var db *gorm.DB
-var err error
-
-func main() {
-	// Set up database connection string
-	dsn := "host=localhost user=user password=password dbname=exampledb port=5432 sslmode=disable"
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		fmt.Println("Failed to connect to the database:", err)
-		return
-	}
-
-	// Auto migrate the Book model
-	db.AutoMigrate(&Book{})
-
-	// Initialize Gin router
-	router := gin.Default()
-
-	// Define routes
-	router.POST("/books", createBook)
-	router.GET("/books", getBooks)
-	router.GET("/books/:id", getBook)
-	router.PUT("/books/:id", updateBook)
-	router.DELETE("/books/:id", deleteBook)
-
-	// Start server
-	router.Run(":8080")
-}
-
-// Handlers for CRUD operations
-
-// Create a new book
-func createBook(c *gin.Context) {
-	var book Book
-	if err := c.ShouldBindJSON(&book); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	db.Create(&book)
-	c.JSON(http.StatusOK, book)
-}
-
-// Get all books
-func getBooks(c *gin.Context) {
-	var books []Book
-	db.Find(&books)
-	c.JSON(http.StatusOK, books)
-}
-
-// Get a specific book by ID
-func getBook(c *gin.Context) {
-	id := c.Param("id")
-	var book Book
-	if err := db.First(&book, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
-		return
-	}
-	c.JSON(http.StatusOK, book)
-}
-
-// Update a book
-func updateBook(c *gin.Context) {
-	id := c.Param("id")
-	var book Book
-	if err := db.First(&book, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
-		return
-	}
-	if err := c.ShouldBindJSON(&book); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	db.Save(&book)
-	c.JSON(http.StatusOK, book)
-}
-
-// Delete a book
-func deleteBook(c *gin.Context) {
-	id := c.Param("id")
-	var book Book
-	if err := db.First(&book, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
-		return
-	}
-	db.Delete(&book)
-	c.JSON(http.StatusOK, gin.H{"message": "Book deleted"})
-}
-
-```
-
-5. Run PostgreSQL in Docker
-
-Make sure your PostgreSQL container is running.
+To view logs from your containers, use the following command:
 
 ```bash
-docker ps
+docker-compose logs -f
 ```
 
-If it is not running, start it with:
+This will show real-time logs from both the Gin backend and PostgreSQL containers. You can also specify a specific service (e.g., app or db) to see logs for only that service:
+
 ```bash
-docker start go-postgres
+docker-compose logs -f app  # Logs for the Gin app
+docker-compose logs -f db   # Logs for PostgreSQL
 ```
 
-6. Running the Go API
-Run the Go application by executing the following command:
+4. Stop the Application
+
+To stop the application, use the following command:
+
 ```bash
-go run main.go
+docker-compose down
 ```
-This will start the API server on localhost:8080.
 
-7. Test the API with curl or Postman
-Create a Book:
+This will stop and remove the containers but will keep the volumes (database data) and networks intact.
+5. Rebuild the Application
+
+If you make changes to your code that require the Docker image to be rebuilt (such as changes in main.go, go.mod, go.sum, or the Dockerfile), you can rebuild and restart the application by using:
+
 ```bash
-curl -X POST http://localhost:8080/books -H "Content-Type: application/json" -d '{"title": "The Hobbit", "author": "J.R.R. Tolkien"}'
+docker-compose up --build
 ```
 
-Get All Books:
+This command rebuilds the Docker image and restarts the containers.
+6. Update Dependencies
+
+If you update dependencies in your go.mod or go.sum file, you’ll want to rebuild the image to install the new dependencies:
+
 ```bash
-curl http://localhost:8080/books
+docker-compose build
+docker-compose up -d
 ```
 
-Get a Book by ID:
+7. Restart Specific Services
+
+If you want to restart only one service (e.g., the Gin application without restarting PostgreSQL), you can use the up command with the service name:
+
 ```bash
-curl http://localhost:8080/books/1
+docker-compose up -d --build app
 ```
 
-Update a Book:
+This will rebuild and restart only the app service, which is useful when you make code changes without needing to touch the database.
+8. Removing Containers, Networks, and Volumes
+
+If you want to completely clean up and remove containers, networks, and persistent data volumes, you can use:
+
 ```bash
-curl -X PUT http://localhost:8080/books/1 -H "Content-Type: application/json" -d '{"title": "The Lord of the Rings", "author": "J.R.R. Tolkien"}'
+docker-compose down -v
 ```
 
-Delete a Book:
+This will stop and remove everything associated with the application, including the database data stored in volumes.
+9. Check the Status of Services
+
+To check the status of running services in your Docker Compose setup:
+
 ```bash
-curl -X DELETE http://localhost:8080/books/1
+docker-compose ps
 ```
 
-8. Dockerize the Go API
+This command shows which services are running and their statuses.
+Quick Summary of Commands
 
-Create a Dockerfile to build the Go API as a Docker container.
-
-Dockerfile
-
-# Use the official Golang image
-FROM golang:1.18
-
-# Set the Current Working Directory inside the container
-WORKDIR /app
-
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
-
-# Download all the dependencies
-RUN go mod download
-
-# Build the Go app
-RUN go build -o main .
-
-# Expose port 8080 to the outside world
-EXPOSE 8080
-
-# Command to run the executable
-CMD ["./main"]
-
-9. Build and Run the Docker Container
-
-    Build the Docker image:
-```bash
-docker build -t go-gin-gorm-api .
-```
-
-    Run the Docker container:
-```bash
-docker run -d -p 8080:8080 --name go-gin-api --link go-postgres:postgres go-gin-gorm-api
-```
-
-The API should now be accessible at localhost:8080 and connected to the PostgreSQL database in Docker.
-10. Clean Up
-
-Stop and remove the Docker containers when done:
-```bash
-docker stop go-gin-api go-postgres
-docker rm go-gin-api go-postgres
-```
-
-That’s it! You've set up a Go API using Gin and GORM, connected it to a PostgreSQL database running in a Docker container, and even Dockerized the API itself!
+    Build the Docker image: docker-compose build
+    Start the application: docker-compose up or docker-compose up -d
+    View logs: docker-compose logs -f
+    Stop the application: docker-compose down
+    Rebuild and restart: docker-compose up --build
+    Update dependencies: docker-compose build && docker-compose up -d
+    Restart specific service: docker-compose up -d --build app
+    Remove containers, networks, and volumes: docker-compose down -v
+    Check status of services: docker-compose ps
