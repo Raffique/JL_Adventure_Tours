@@ -1,3 +1,26 @@
+<!--
+  
+  <script lang="ts">
+import { defineComponent } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+
+export default defineComponent({
+  setup() {
+    const authStore = useAuthStore();
+
+    const handleLogin = async () => {
+      const response = await login({ username: 'test', password: 'password' });
+      authStore.setToken(response.token); // Store token in Pinia
+    };
+
+    return { handleLogin, authStore };
+  },
+});
+</script>
+ 
+ -->
+
+
 <script setup lang="ts">
 import UserAuthForm from '@/components/UserAuthForm.vue'
 import { cn } from '@/lib/utils'

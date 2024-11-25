@@ -33,7 +33,6 @@ services:
       - "3000:3000"
     environment:
       - CHOKIDAR_USEPOLLING=true  # Fixes file watching issues in Docker
-      - /app/node_modules 
     command: npm run dev          # Run the development server
     volumes:
       - ./App:/app

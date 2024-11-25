@@ -1,21 +1,28 @@
-# Build stage
 FROM node:21.7.3-alpine AS build-stage
-
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
-COPY package.json package-lock.json ./
-RUN npm install --no-optional
+# Copy package files
+COPY package*.json ./
 
-# Copy the rest of the Vue.js application files
+# Clean install dependencies
+RUN rm -rf node_modules && \
+    npm cache clean --force && \
+    npm install
+
+# Copy the rest of the application
 COPY . .
 
-#-------------------- UNCOMMMENT FOR DEVELOPMENT -------------------------
-    # Expose the development server port
+# Ensure vite is in PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# Set permissions if needed
+RUN chmod +x node_modules/.bin/vite
+
+# Expose the development server port
 EXPOSE 3000
 
-# Start the development server
-CMD ["npm", "run", "dev"]
+# Use 0.0.0.0 to make the server accessible outside the container
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
 #-------------------- UNCOMMMENT FOR PRODUCTION -------------------------
 # # Build the application for production
